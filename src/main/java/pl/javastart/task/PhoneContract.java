@@ -5,7 +5,7 @@ public abstract class PhoneContract {
 
     abstract boolean sendSmsIfPossible();
 
-    abstract boolean talkIfPossible();
+    abstract int talkIfPossible(int secondsExpected);
 
     abstract void accountState();
 }

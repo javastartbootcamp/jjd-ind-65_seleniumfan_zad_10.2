@@ -57,19 +57,28 @@ public class CardPhoneContract extends PhoneContract {
     @Override
     public boolean sendSmsIfPossible() {
         if (accountState >= smsCost) {
-            accountState = accountState - smsCost;
+            accountState -= smsCost;
             return true;
         }
         return false;
     }
 
     @Override
-    boolean talkIfPossible() {
-        return !(accountState - minuteCost / 60 <= 0);
+    int talkIfPossible(int secondsExpected) {
+        double cost = secondsExpected * (minuteCost / 60);
+        if (accountState - cost >= 0) {
+            accountState -= cost;
+            return secondsExpected;
+        } else {
+            double overCost = cost - accountState;
+            accountState = 0;
+            double overSeconds = (overCost * 60) / minuteCost;
+            return (int) (secondsExpected - overSeconds);
+        }
     }
 
     @Override
     void accountState() {
-        System.out.println("Na koncie zostało " + accountState + " zł");
+        System.out.printf("Na koncie zostało %.2f zł", accountState);
     }
 }

@@ -4,27 +4,28 @@ public class Phone {
     private int sms;
     private int mms;
     private int talk;
-    PhoneContract phoneContract;
+    private PhoneContract phoneContract;
 
     public Phone(PhoneContract phoneContract) {
         this.phoneContract = phoneContract;
     }
 
-    public boolean sendSms() {
+    public void sendSms() {
         if (phoneContract.sendSmsIfPossible()) {
             sms++;
             System.out.println("SMS wysłany");
-            return true;
+        } else {
+            System.out.println("Nie udało się wysłać SMSa\n");
         }
-        System.out.println("Nie udało się wysłać SMSa\n");
-        return false;
     }
 
     public void call(int seconds) {
-        if (!phoneContract.talkIfPossible()) {
+        int secondActuallyTalked = phoneContract.talkIfPossible(seconds);
+        if (secondActuallyTalked <= 0) {
             System.out.println("Nie masz wystarczających środków na koncie żeby rozmawiać");
+        } else {
+            talk += secondActuallyTalked;
         }
-        talk += seconds;
     }
 
     public boolean sendMms() {
@@ -45,5 +46,4 @@ public class Phone {
         phoneContract.accountState();
         System.out.println();
     }
-
 }

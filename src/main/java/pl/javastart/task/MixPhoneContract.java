@@ -1,64 +1,53 @@
 package pl.javastart.task;
 
-public class MixPhoneContract extends PhoneContract {
-    private static int freeSms = 2;
-    private static int freeMms = 2;
-    private static int extraMinutes = 2;
-    private double smsCost;
-    private double mmsCost;
-    private double accountState;
-    private double minuteCost;
+public class MixPhoneContract extends CardPhoneContract {
+    private int freeSms = 2;
+    private int freeMms = 2;
+    private double extraMinutes = 2;
 
-    public MixPhoneContract(double smsCost, double mmsCost, double accountState, double minuteCost) {
-        this.smsCost = smsCost;
-        this.mmsCost = mmsCost;
-        this.accountState = accountState;
-        this.minuteCost = minuteCost;
+    public MixPhoneContract(int freeSms, int freeMms, double extraMinutes, double accountState, double smsCost, double mmsCost, double minuteCost) {
+        super(accountState, smsCost, mmsCost, minuteCost);
+        this.freeSms = freeSms;
+        this.freeMms = freeMms;
+        this.extraMinutes = extraMinutes;
     }
 
     @Override
-    boolean sendMmsIfPossible() {
+    public boolean sendMmsIfPossible() {
         if (freeMms > 0) {
             freeMms--;
             return true;
         }
 
-        if (accountState >= mmsCost) {
-            accountState = accountState - mmsCost;
-            return true;
-        }
-        return false;
+        return super.sendMmsIfPossible();
     }
 
     @Override
-    boolean sendSmsIfPossible() {
+    public boolean sendSmsIfPossible() {
         if (freeSms > 0) {
             freeSms--;
             return true;
         }
 
-        if (accountState >= smsCost) {
-            accountState = accountState - smsCost;
-            return true;
-        }
-        return false;
+        return super.sendSmsIfPossible();
     }
 
     @Override
-    boolean talkIfPossible() {
-        if (extraMinutes > 0) {
-            return true;
+    int talkIfPossible(int secondsExpected) {
+        double extraSeconds = extraMinutes * 60;
+        if (extraSeconds - secondsExpected >= 0) {
+            extraMinutes -= (secondsExpected / 60.0);
+            return secondsExpected;
+        } else {
+            int overSeconds = (int) (secondsExpected - extraSeconds);
+            extraMinutes = 0;
+            return secondsExpected - overSeconds + super.talkIfPossible(overSeconds);
         }
-
-        if (accountState >= minuteCost / 60) {
-            return true;
-        }
-        return false;
     }
 
     @Override
     void accountState() {
         System.out.printf("Ilość darmowych SMSów: %d, ilość darmowych MMSów: %d," +
-                " ilość darmowych minut: %d, stan konta: %.2f", freeSms, freeMms, extraMinutes, accountState);
+                " ilość darmowych minut: %.2f, stan konta: %.2f", freeSms, freeMms, extraMinutes, getAccountState());
     }
 }
