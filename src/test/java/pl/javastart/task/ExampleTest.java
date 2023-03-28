@@ -34,6 +34,4 @@ public class ExampleTest {
     void cleanup() {
         System.setOut(originalOut);
     }
-
-
 }
