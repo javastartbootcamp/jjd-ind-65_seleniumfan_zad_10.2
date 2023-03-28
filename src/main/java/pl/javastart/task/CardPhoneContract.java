@@ -64,21 +64,21 @@ public class CardPhoneContract extends PhoneContract {
     }
 
     @Override
-    int talkIfPossible(int secondsExpected) {
-        double cost = secondsExpected * (minuteCost / 60);
+    int talkIfPossible(int callTimeSeconds) {
+        double cost = callTimeSeconds * (minuteCost / 60);
         if (accountState - cost >= 0) {
             accountState -= cost;
-            return secondsExpected;
+            return callTimeSeconds;
         } else {
             double overCost = cost - accountState;
             accountState = 0;
             double overSeconds = (overCost * 60) / minuteCost;
-            return (int) (secondsExpected - overSeconds);
+            return (int) (callTimeSeconds - overSeconds);
         }
     }
 
     @Override
-    void accountState() {
-        System.out.printf("Na koncie zostało %.2f zł", accountState);
+    String accountState() {
+        return String.format("Na koncie zostało %.2f zł", accountState);
     }
 }

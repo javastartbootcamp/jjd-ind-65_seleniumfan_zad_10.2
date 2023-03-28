@@ -1,9 +1,9 @@
 package pl.javastart.task;
 
 public class MixPhoneContract extends CardPhoneContract {
-    private int freeSms = 2;
-    private int freeMms = 2;
-    private double extraMinutes = 2;
+    private int freeSms;
+    private int freeMms;
+    private double extraMinutes;
 
     public MixPhoneContract(int freeSms, int freeMms, double extraMinutes, double accountState, double smsCost, double mmsCost, double minuteCost) {
         super(accountState, smsCost, mmsCost, minuteCost);
@@ -33,21 +33,21 @@ public class MixPhoneContract extends CardPhoneContract {
     }
 
     @Override
-    int talkIfPossible(int secondsExpected) {
+    int talkIfPossible(int callTimeSeconds) {
         double extraSeconds = extraMinutes * 60;
-        if (extraSeconds - secondsExpected >= 0) {
-            extraMinutes -= (secondsExpected / 60.0);
-            return secondsExpected;
+        if (extraSeconds - callTimeSeconds >= 0) {
+            extraMinutes -= (callTimeSeconds / 60.0);
+            return callTimeSeconds;
         } else {
-            int overSeconds = (int) (secondsExpected - extraSeconds);
+            int overSeconds = (int) (callTimeSeconds - extraSeconds);
             extraMinutes = 0;
-            return secondsExpected - overSeconds + super.talkIfPossible(overSeconds);
+            return callTimeSeconds - overSeconds + super.talkIfPossible(overSeconds);
         }
     }
 
     @Override
-    void accountState() {
-        System.out.printf("Ilość darmowych SMSów: %d, ilość darmowych MMSów: %d," +
+    String accountState() {
+        return String.format("Ilość darmowych SMSów: %d, ilość darmowych MMSów: %d," +
                 " ilość darmowych minut: %.2f, stan konta: %.2f", freeSms, freeMms, extraMinutes, getAccountState());
     }
 }

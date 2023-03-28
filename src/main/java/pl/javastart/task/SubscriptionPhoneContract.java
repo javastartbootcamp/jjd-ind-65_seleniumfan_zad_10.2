@@ -1,7 +1,7 @@
 package pl.javastart.task;
 
 public class SubscriptionPhoneContract extends PhoneContract {
-    private double amountSubscription = 30;
+    private double amountSubscription;
 
     public SubscriptionPhoneContract(double amountSubscription) {
         this.amountSubscription = amountSubscription;
@@ -18,12 +18,12 @@ public class SubscriptionPhoneContract extends PhoneContract {
     }
 
     @Override
-    int talkIfPossible(int secondsExpected) {
-        return secondsExpected;
+    int talkIfPossible(int callTimeSeconds) {
+        return callTimeSeconds;
     }
 
     @Override
-    void accountState() {
-        System.out.println("Rachunek wynosi: " + amountSubscription);
+    String accountState() {
+        return "Rachunek wynosi: " + amountSubscription;
     }
 }

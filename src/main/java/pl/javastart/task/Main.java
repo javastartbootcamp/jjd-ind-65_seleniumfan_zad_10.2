@@ -7,7 +7,8 @@ public class Main {
         phone.printAccountState();
 
         phone.sendSms();
-        phone.call(120);
+        phone.call(30);
+        phone.call(20);
         phone.printAccountState();
 
         phone.sendSms();

@@ -24,6 +24,7 @@ public class Phone {
         if (secondActuallyTalked <= 0) {
             System.out.println("Nie masz wystarczających środków na koncie żeby rozmawiać");
         } else {
+            System.out.println("Rozmowa trwała " + secondActuallyTalked + " sekund");
             talk += secondActuallyTalked;
         }
     }
@@ -42,8 +43,8 @@ public class Phone {
         System.out.println("=== STAN KONTA ===");
         System.out.println("Wysłanych SMSów: " + sms);
         System.out.println("Wysłanych MMSów: " + mms);
-        System.out.println("Liczba sekund rozmowy: " + talk);
-        phoneContract.accountState();
+        System.out.println("Liczba sekund rozmów: " + talk);
+        System.out.println(phoneContract.accountState());
         System.out.println();
     }
 }
